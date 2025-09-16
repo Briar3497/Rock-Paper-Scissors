@@ -1,10 +1,36 @@
+import random
+import pygame
+
+pygame.init()
+pygame.font.init()
+screen_width = 600
+screen_height = 800
+screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
+running = True
+
 player_wins = 0
 computer_wins = 0
-import random
 
-print("Let's play rock, paper, or scissors")
-print('First to 3 wins')
-print()
+font = pygame.font.SysFont('Arial', 20)
+opening_line = font.render('Let\'s play rock, paper, or scissors\n'
+                                'First to 3 wins\n'
+                                '\n', True, (255, 255, 255))
+text_rect = opening_line.get_rect(center=(screen_width // 2, 200))
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((0, 0, 0))
+    screen.blit(opening_line, text_rect)
+
+    pygame.display.flip()
+
+pygame.quit()
+
 
 while player_wins < 3 and computer_wins < 3:
   choices = ["rock", "paper", "scissors"]
