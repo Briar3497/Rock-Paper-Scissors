@@ -15,6 +15,7 @@ computer_wins = 0
 white = 255, 255, 255
 black = 0, 0, 0
 dark_grey = 50, 50, 50
+gold = 239, 191, 4
 
 font = pygame.font.SysFont('Arial', 20)
 line_start_x = 180
@@ -41,24 +42,46 @@ scissors_rect = pygame.Rect(scissors_pos, rect_size)
 scissors_text_surface = font.render('Scissors', True, white)
 scissors_choice = scissors_text_surface.get_rect(center=scissors_rect.center)
 
+
 running = True
 while running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
     screen.fill(black)
+    mouse_pos = pygame.mouse.get_pos()
+
     for i, line in enumerate(lines):
         text_surface = font.render(line, True, white)
         screen.blit(text_surface, (line_start_x, line_start_y + i * line_height))
 
-    pygame.draw.rect(screen, dark_grey, rock_rect)
+    rock_is_hovered = rock_rect.collidepoint(mouse_pos)
+    if rock_is_hovered:
+        rock_color = gold
+    else:
+        rock_color = dark_grey
+
+    paper_is_hovered = paper_rect.collidepoint(mouse_pos)
+    if paper_is_hovered:
+        paper_color = gold
+    else:
+        paper_color = dark_grey
+
+    scissors_is_hovered = scissors_rect.collidepoint(mouse_pos)
+    if scissors_is_hovered:
+        scissors_color = gold
+    else:
+        scissors_color = dark_grey
+
+    pygame.draw.rect(screen, rock_color, rock_rect)
     screen.blit(rock_text_surface, rock_choice)
 
-    pygame.draw.rect(screen, dark_grey, paper_rect)
+    pygame.draw.rect(screen, paper_color, paper_rect)
     screen.blit(paper_text_surface, paper_choice)
 
-    pygame.draw.rect(screen, dark_grey, scissors_rect)
+    pygame.draw.rect(screen, scissors_color, scissors_rect)
     screen.blit(scissors_text_surface, scissors_choice)
 
     pygame.display.flip()
