@@ -42,13 +42,63 @@ scissors_rect = pygame.Rect(scissors_pos, rect_size)
 scissors_text_surface = font.render('Scissors', True, white)
 scissors_choice = scissors_text_surface.get_rect(center=scissors_rect.center)
 
+player_choice = None
+winner = None
+
 
 running = True
 while running:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if rock_rect.collidepoint(event.pos):
+                    player_choice = "rock"
+                elif paper_rect.collidepoint(event.pos):
+                    player_choice = "paper"
+                elif scissors_rect.collidepoint(event.pos):
+                    player_choice = "scissors"
+
+                while player_wins < 3 and computer_wins < 3:
+                    choices = ["rock", "paper", "scissors"]
+                    computer_choice = random.choice(choices)
+
+                    if player_choice is not None:
+                        print(f"Computer chose: {computer_choice}")
+                        if (player_choice == "rock" and computer_choice == "scissors") or (
+                                player_choice == "scissors" and computer_choice == "paper") or (
+                                player_choice == "paper" and computer_choice == "rock"):
+                            winner = "Player"
+                        elif (player_choice == "rock" and computer_choice == "rock") or (
+                                player_choice == "scissors" and computer_choice == "scissors") or (
+                                player_choice == "paper" and computer_choice == "paper"):
+                            winner = "Tie"
+                        else:
+                            winner = "Computer"
+
+                    if winner == "Player":
+                        player_wins += 1
+                        print("You won")
+                    elif winner == "Computer":
+                        computer_wins += 1
+                        print("Computer won")
+                    else:
+                        print("It's a tie")
+
+                    print()
+                    print(f"Current Score - Player: {player_wins}, Computer: {computer_wins}")
+                    print()
+                    break
+
+                if player_wins == 3:
+                    print("Congratulations! You won.")
+                    print('Thank you for playing!')
+                    break
+                elif computer_wins == 3:
+                    print("Computer won!")
+                    print('Thank you for playing!')
+                    break
 
     screen.fill(black)
     mouse_pos = pygame.mouse.get_pos()
@@ -84,42 +134,8 @@ while running:
     pygame.draw.rect(screen, scissors_color, scissors_rect)
     screen.blit(scissors_text_surface, scissors_choice)
 
+
+
     pygame.display.flip()
 
 pygame.quit()
-
-
-while player_wins < 3 and computer_wins < 3:
-  choices = ["rock", "paper", "scissors"]
-  computer_choice = random.choice(choices)
-  player_choice = input("Choose rock, paper, or scissors:\n").lower()
-
-  print(f"Computer chose: {computer_choice}")
-  if (player_choice == "rock" and computer_choice == "scissors") or    (player_choice == "scissors" and computer_choice == "paper") or (player_choice == "paper" and computer_choice == "rock"):
-    winner = "Player"
-  elif (player_choice == "rock" and computer_choice == "rock") or (player_choice == "scissors" and computer_choice == "scissors") or (player_choice == "paper" and computer_choice == "paper"):
-    winner = "Tie"
-  else:
-    winner = "Computer"
-
-  if winner == "Player":
-    player_wins += 1
-    print("You won")
-  elif winner == "Computer":
-    computer_wins += 1
-    print("Computer won")
-  else:
-    print("It's a tie")
-  
-  print()
-  print(f"Current Score - Player: {player_wins}, Computer: {computer_wins}")
-  print()
-
-  if player_wins == 3:
-    print("Congratulations! You won.")
-    print('Thank you for playing!')
-    break
-  elif computer_wins == 3:
-    print("Computer won!")
-    print('Thank you for playing!')
-    break
